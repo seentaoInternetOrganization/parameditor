@@ -1,0 +1,4 @@
+{
+	"datatype":["string", "int", "long", "float", "boolean", "jsonArray", "json"],
+	"type":["addApi", "addType", "checkApi", "addData", "checkData", "compareData"]
+}
