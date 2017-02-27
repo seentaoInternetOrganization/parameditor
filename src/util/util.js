@@ -44,6 +44,42 @@ exports.getItemjson = function () {
     };
 };
 /**
+ * [isChecked 是否有选中元素]
+ * @return {[boolean]} [description]
+ */
+exports.isChecked = function (item) {
+    let checked = false;
+        for(let key of item.keys()){
+            if(item[key][1].need)
+                checked = true;
+        }
+        return checked;
+};
+/**
+ * [isAllChecked 是否全选中元素]
+ * @return {[boolean]} [description]
+ */
+exports.isAllChecked = function (item) {
+    let checked = false;
+        for(let key of item.keys()){
+            if(!item[key][1].need){
+                return false;
+            }else{
+                checked = true;
+            }
+        }
+        return checked;
+};
+/**
+ * [checkAll 全选中元素]
+ */
+exports.checkAll = function (item, checked) {
+    for(let key of item.keys()){
+            item[key][1]["need"]=checked;
+        }
+};
+
+/**
  * [objToArray 对象转为数组]
  * @param  {[type]} obj [对象]
  * @return {[type]}     [数组]
@@ -88,15 +124,19 @@ exports.isArray = function (obj) {
 import Item from '../components/Item.js';
 import FItem from '../components/FItem.js';
 import React from 'react';
+import { Button, Row } from 'antd';
+
 exports.getItem = function getItem (objArray, level, _this, fobj) {
   level++;
-  return <div>{objArray.map((item, index)=>{
-      if(item[1].child!=undefined){
-          return <FItem key={index} level = {level} index={index} obj={objArray} that={_this}/>;
-      }else{
-          return <Item  key={index} level = {level} index={index} obj={objArray} that={_this}/>;
-      }
-  })}</div>;
+  return  <div >
+            
+      {objArray.map((item, index)=>{
+        if(item[1].child!=undefined){
+            return <FItem key={index} level = {level} index={index} obj={objArray} that={_this}/>;
+        }else{
+            return <Item  key={index} level = {level} index={index} obj={objArray} that={_this}/>;
+        }
+      })}</div>;
   /*const keys = Object.keys(obj);
   let i = 0;
   level++;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Icon, Switch, Input, Select, Checkbox } from 'antd';
+import { Button, Icon, Switch, Input, Select, Checkbox, Row, Col } from 'antd';
 import config from '../config.json';
 import Util from '../util/util.js';
 const datatype = config.datatype;
@@ -63,9 +63,45 @@ const Item = (props) => {
 		props.obj[props.index][1]["type"]=value;
 		//修改为jsonArray json时自动添加child
 		if(value=="jsonArray"||value=="json"){
-			props.obj[props.index][1]["child"]=[[["", Util.getItemjson()]]]
+			_value["child"]=[[["", Util.getItemjson()]]];
 		}
 		_this.setState(_this.state);
+	}
+	//addType选择字段
+	const changeChecked = (e)=>{
+		const checked = e.target.checked;
+		_value["need"] = checked;
+		//全选
+		if(haschild){
+			const child = _value.child;
+			for(let index of child.keys()){
+				Util.checkAll(child[index], e.target.checked);
+			}
+		}
+		_this.setState(_this.state);
+	}
+	const isChecked = ()=>{
+		let checked = false;
+		if(haschild){
+			const child = _value.child;
+			for(let index of child.keys()){
+				if(Util.isChecked(child[index])){
+					checked=true;
+				}
+			}
+		}else{
+			checked = _value.need;
+		}
+		return checked;
+	}
+	let backgroundColor = isCompareData&&_value.highlight?"#f9bdbb":"";
+	//鼠标移入
+	const mouseOver = ()=>{
+		backgroundColor = "#f9bdbb";		
+	}
+	//鼠标移出
+	const mouseOut = ()=>{
+		backgroundColor = isCompareData&&_value.highlight?"#f69988":"";;		
 	}
 	//addApi的页面元素
 	const isAddApi= _this.state.type=="addApi";
@@ -75,46 +111,47 @@ const Item = (props) => {
 	const isCheckData= _this.state.type=="checkData";
 	const isCompareData= _this.state.type=="compareData";
 	const addApiDom = (
-			<div style={{float:"right"}}>
-				{haschild?<Button  onClick={props.onDisplay} style={{marginLeft:10}} shape="circle" icon={props.display=="block"?"up":"down"} size="small"/>:null}
-				<Input onChange={(e)=>{props.obj[props.index][0]=e.target.value; _this.setState(_this.state)}}  style={{width:60}} size="small" placeholder="字段名" value={_key} style={{width: 80, marginLeft:10}}/>
+			<Row type="flex" justify="start" style={{marginLeft:(props.level-1)*10}}>
+				<Col span={2}>{haschild?<Button  onClick={props.onDisplay} shape="circle" icon={props.display=="block"?"up":"down"} size="small"/>:null}</Col>
+				<Input onChange={(e)=>{props.obj[props.index][0]=e.target.value; _this.setState(_this.state)}}  style={{width:60}} size="small" placeholder="字段名" value={_key} style={{width: 80}}/>
 				<Select onChange={changeType} size="small" value={_value.type==undefined?datatype[0]:_value.type} style={{ width: 80, marginLeft:10, marginRight:10 }} >
 					{datatype.map((item)=><Option key={item} value={item}>{item}</Option>)}
 				</Select>
 				 : 
 				<Input onChange={(e)=>{props.obj[props.index][1]["desc"]=e.target.value;_this.setState(_this.state)}} style={{width:120}} size="small" placeholder="字段描述" value={_value.desc} style={{width: 80, marginLeft:10}}/> 
-			</div>
+			</Row>
 	);
 	//其他的页面元素
 	const otherDom = (
-			<div style={{float:"right"}}>
-				{haschild?<Button  onClick={props.onDisplay} style={{marginLeft:10, float:"left"}} shape="circle" icon={props.display=="block"?"up":"down"} size="small"/>:null}
-				<div style={{float:"left",width:220}}>
-					<span style={{width: 80, marginLeft:10}}>{_key}</span>
+			<Row type="flex" justify="start" style={{marginLeft:(props.level-1)*10}} >
+				<Col span={2}>{haschild?<Button  onClick={props.onDisplay} shape="circle" icon={props.display=="block"?"up":"down"} size="small"/>:null}</Col>
+				<Col span={1}>{haschild? "[]":""}</Col>
+				<div style={{float:"left"}}>
+					{isAddType?<Checkbox checked={isChecked()} indeterminate={isChecked()} onChange={changeChecked}/>:null}
+					<span>{_key}</span>
 					[{_value.type}]
 					 : 
 					{isAddData&&!haschild?<Input onChange={(e)=>{props.obj[props.index][1]["value"]=e.target.value;_this.setState(_this.state)}} style={{width:120}} size="small" placeholder="值" value={_value.value} style={{width: 80, marginLeft:10}}/> :isCheckData||isCompareData?<span style={{color:_value.required?"#dd4a68":""}}>{_value.value}</span>:_value.desc}
 				</div>
-			</div>
+			</Row>
 	);
   return (
     
 
-    <div style={{backgroundColor:isCompareData&&_value.highlight?"#f9bdbb":"", marginTop:10}}>
-		<div style={{float:"left"}}>
+    <Row style={{backgroundColor:backgroundColor}} onMouseOver={mouseOver} onMouseOut={mouseOut}>
+		<Col span={5} style={{float:"left"}}>
 			<div style={{display:_this.state.type=="addApi"?"block":"none"}}>
-				<Button onClick={add} shape="circle" icon="plus" type="primary" size="small" style={{marginLeft:10}}/>
-				<Button onClick={remove} shape="circle" icon="delete" type="danger" size="small" style={{marginLeft:10}}/>
-				<Switch onChange={(value)=>{props.obj[props.index][1]["required"]=value;_this.setState(_this.state)}} checkedChildren={'必'} unCheckedChildren={'非'} checked={_value.required} style={{marginLeft:10}}/>
+				<Button onClick={add} shape="circle" icon="plus" type="primary" size="small" />
+				<Button onClick={remove} shape="circle" icon="delete" type="danger" size="small" />
+				<Switch onChange={(value)=>{props.obj[props.index][1]["required"]=value;_this.setState(_this.state)}} checkedChildren={'必'} unCheckedChildren={'非'} checked={_value.required}/>
 			</div>
-		</div>
+		</Col>
 
-		<div style={{float:"left", marginLeft:20*(props.level-1), width:320}}>
+		<Col span={19} >
 			{isAddApi?addApiDom:otherDom}
 			
 
-		</div>
-		<br/>
+		</Col>
 		{/*<div style={{backgroundColor:data.highlight?"#653627":"", marginTop:10}}>
 		<div style={{float:"left", width:180}}>
 			<Button onClick={()=>{add()}} shape="circle" icon="plus" type="primary" size="small" style={{marginLeft:10}}/>
@@ -132,7 +169,7 @@ const Item = (props) => {
 		</div>
 		<br/>
     </div>*/}
-    </div>
+    </Row>
   );
 };
 

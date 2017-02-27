@@ -1,5 +1,5 @@
 const webpack = require('atool-build/lib/webpack');
-
+var path = require('path');
 module.exports = function(webpackConfig, env) {
   webpackConfig.babel.plugins.push('transform-runtime');
   webpackConfig.babel.plugins.push(['import',{
@@ -40,6 +40,18 @@ module.exports = function(webpackConfig, env) {
       loader.test = /\.css$/;
     }
   });
-
+  // //配置入口文件
+  // webpackConfig.entry={
+  //   index: [
+  //           'webpack-dev-server/client?http://localhost:',
+  //           'webpack/hot/only-dev-server',
+  //           './src/index.js'
+  //       ]
+  // }
+  // //配置bundle文件
+  // webpackConfig.output={
+  //       path: __dirname + '/assets/',
+  //       filename: 'bundle.js'
+  // }
   return webpackConfig;
 };

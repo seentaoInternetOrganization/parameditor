@@ -4,12 +4,14 @@
 		"type":"string",
 		"required":true,
 		"value":"admin",
+		"need":false,
 		"highlight":false
 	},
 	"users":{
 		"desc":"用户集合",
 		"type":"jsonArray",
 		"required":true,
+		"need":true,
 		"highlight":true,
 		"child":[
 			{
@@ -17,14 +19,16 @@
 					"desc":"用户名",
 					"type":"boolean",
 					"required":false,
-					"value":"admin",
+					"need":true,
+					"value":"admin1",
 					"highlight":true
 				},
 				"userType":{
 					"desc":"用户类型",
 					"type":"number",
 					"required":true,
-					"value":"教师",
+					"value":"教师1",
+					"need":true,
 					"highlight":false
 				}
 			},
@@ -34,6 +38,7 @@
 					"type":"string",
 					"required":false,
 					"value":"admin",
+					"need":false,
 					"highlight":true
 				},
 				"userType":{
@@ -41,6 +46,7 @@
 					"type":"string",
 					"required":true,
 					"value":"教师",
+					"need":true,
 					"highlight":false
 				}
 			}

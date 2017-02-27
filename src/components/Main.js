@@ -32,13 +32,16 @@ class Main extends React.Component {
 
         const menu = <Menu onClick={this.onClick.bind(this)}>{config.type.map((item)=><Menu.Item key={item}>{item}</Menu.Item>)}</Menu>
         return (
-            <div>
-                <Dropdown overlay={menu}>
+            <div style={{width:480, height:320, overflowY:"auto", borderWidth:1, borderColor:"#F4A460", borderStyle:"solid", fontFamily:"droid sans mono, consolas, monospace, courier new, courier, sans-serif", fontWeight: "bold"}}>
+                <div style={{width:478, height:20, backgroundColor:"#F4A460", position:"absolute", zIndex:9, marginTop:0, marginLeft:0}}></div>
+                <div style={{marginTop:20, marginLeft:10}}>
+                <Dropdown overlay={menu} >
                     <a className="ant-dropdown-link" href="#">
-                      切换操作类型<Icon type="down" />
+                      {this.state.type}<Icon type="down" />
                     </a>
                 </Dropdown>
                 {Util.getItem(this.state.testjson, 0, this, this.state)}
+                </div>
             </div>
         );
     }
