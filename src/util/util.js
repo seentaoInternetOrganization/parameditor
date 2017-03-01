@@ -33,6 +33,19 @@ exports.getTestjson = function () {
     const testjson = require('../test.json');
     return testjson;
 };
+exports.getType = function () {
+    //获取传递过来的编辑器类型
+    return "addApi";
+};
+//深拷贝！
+exports.deepClone = function (obj){
+  var newObj = {};
+  newObj = JSON.parse(JSON.stringify(obj));
+  return newObj;
+}
+exports.setChangedjson = function (mChangedData) {
+    
+};
 exports.getItemjson = function () {
     const itemjson = require('../item.json');
     return {
@@ -93,7 +106,6 @@ exports.objToArray = function objToArray(obj) {
       }
     }
       strMap.set(k, obj[k]);
-    
   }
   return [...strMap];
 }
@@ -106,7 +118,14 @@ exports.arrayToObj = function arrayToObj(array) {
   let strMap = new Map(array);
   let obj = Object.create(null);
   for (let [k,v] of strMap) {
-    obj[k] = v;
+    obj[k] = this.deepClone(v);
+    const child = v.child;
+    //有子元素
+    if(child!=undefined){
+      for(let key of child.keys()){
+        obj[k]["child"].splice(key, 1, this.arrayToObj(child[key]));//替换
+      }
+    }
   }
   return obj;
 }
@@ -125,16 +144,20 @@ import Item from '../components/Item.js';
 import FItem from '../components/FItem.js';
 import React from 'react';
 import { Button, Row } from 'antd';
-
-exports.getItem = function getItem (objArray, level, _this, fobj) {
+let lineNumber = 0;
+exports.getItem = function getItem (objArray, level, _this, mlineNumber) {
+  if(mlineNumber!=undefined)
+    lineNumber=mlineNumber;
   level++;
   return  <div >
             
       {objArray.map((item, index)=>{
         if(item[1].child!=undefined){
-            return <FItem key={index} level = {level} index={index} obj={objArray} that={_this}/>;
+            lineNumber++;
+            return <FItem key={index} level = {level} index={index} obj={objArray} that={_this} lineNumber={lineNumber}/>;
         }else{
-            return <Item  key={index} level = {level} index={index} obj={objArray} that={_this}/>;
+            lineNumber++;
+            return <Item  key={index} level = {level} index={index} obj={objArray} that={_this} lineNumber={lineNumber}/>;
         }
       })}</div>;
   /*const keys = Object.keys(obj);

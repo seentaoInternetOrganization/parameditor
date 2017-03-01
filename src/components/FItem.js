@@ -34,6 +34,11 @@ class FItem extends React.Component {
         this.props.obj[this.props.index][1].child.splice(index+1,0,item);
         this.props.that.setState(this.props.that.state);
     }
+    //TODO删除json
+    onDelete(item, index){
+        this.props.obj[this.props.index][1].child.splice(index+1,0,item);
+        this.props.that.setState(this.props.that.state);
+    }
     //json层全选
     checkAll(item, e){
         Util.checkAll(item, e.target.checked);
@@ -42,15 +47,17 @@ class FItem extends React.Component {
     render() {
         return (
             <div>
-                <Item level = {this.props.level} index={this.props.index} obj={this.props.obj} onDisplay={()=>{this.setState({display:this.state.display=="block"?"none":"block"})}} display={this.state.display} that={this.props.that}/>
+                <Item level = {this.props.level} index={this.props.index} obj={this.props.obj} onDisplay={()=>{this.setState({display:this.state.display=="block"?"none":"block"})}} display={this.state.display} that={this.props.that} lineNumber={this.props.lineNumber}/>
                 <div style={{display:this.state.display}}>
-                    {this.props.obj[this.props.index][1].child.map((item, index)=>
-                        <div key={index} >
+                    {this.props.obj[this.props.index][1].child.map((item, index)=>{
+                        return <div key={index} >
                             <Button onClick={this.onItemDisplay.bind(this,index)} shape="circle" size="small"  style={{marginLeft:120+this.props.level*10}}>{"{}"}</Button>
                             {this.props.that.state.type=="addType"?<Checkbox checked={Util.isAllChecked(item)} indeterminate={Util.isChecked(item)} onChange={this.checkAll.bind(this, item)}/>:null}
                             {this.props.that.state.type=="addData"?<Button onClick={this.onAdd.bind(this, item, index)} icon="plus" type="primary" shape="circle" size="small" />:null}
-                            <div style={{display:this.state[index]==undefined?"block":this.state[index]?"block":"none"}}>{Util.getItem(item, this.props.level, this.props.that, this.props.obj[this.props.index])}</div>
+                            <div style={{display:this.state[index]==undefined?"block":this.state[index]?"block":"none"}}>{Util.getItem(item, this.props.level, this.props.that)}</div>
                         </div>
+                    }
+                        
                     )}
                 </div>
             </div>

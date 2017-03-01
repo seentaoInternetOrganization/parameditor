@@ -11,7 +11,10 @@
 <div id="liuyang"></div>
 <script src="index.js"></script>
 <script type="text/javascript">
-	new ParamEditor().setDom();
+var callback = function(data){
+  alert(data.msg);
+}
+  new ParamEditor().setDom({"msg":{}}, "addApi", "liuyang", callback);
 </script>
 </body>
 </html>
