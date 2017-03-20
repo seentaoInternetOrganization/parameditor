@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>接口编辑哦</title>
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body>
+<input type="button" value="get" onclick="get()"/>
+<div id="liuyang"></div>
+<script src="index.js"></script>
+<script type="text/javascript">
+var callback = function(data){
+  alert(data.msg);
+}
+var editor = new ParamEditor();
+
+var get = function(){
+  alert(editor.getData());
+}
+  editor.setDom({"msg":{}}, "addApi", "liuyang", callback);
+</script>
+</body>
+</html>

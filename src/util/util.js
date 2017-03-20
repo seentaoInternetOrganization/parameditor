@@ -37,6 +37,10 @@ exports.getType = function () {
     //获取传递过来的编辑器类型
     return "addApi";
 };
+exports.isHasCallback = function () {
+    //是否有传递回调     
+    return false;
+};
 //深拷贝！
 exports.deepClone = function (obj){
   var newObj = {};
@@ -44,7 +48,10 @@ exports.deepClone = function (obj){
   return newObj;
 }
 exports.setChangedjson = function (mChangedData) {
-    
+
+};
+exports.onChangedjson = function (mChangedData) {
+
 };
 exports.getItemjson = function () {
     const itemjson = require('../item.json');
@@ -150,7 +157,7 @@ exports.getItem = function getItem (objArray, level, _this, mlineNumber) {
     lineNumber=mlineNumber;
   level++;
   return  <div >
-            
+
       {objArray.map((item, index)=>{
         if(item[1].child!=undefined){
             lineNumber++;
@@ -171,7 +178,7 @@ exports.getItem = function getItem (objArray, level, _this, mlineNumber) {
           //折叠
           return <FItem key={item} level = {level} _key={item} obj={obj} fobj={fobj} that={_this}/>;
       }else{
-          //Item 
+          //Item
           return <Item  key={item} level = {level} _key={item} obj={obj} fobj={fobj} that={_this}/>;
       }
     })*/
