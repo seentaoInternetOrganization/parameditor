@@ -3,5 +3,6 @@
 	"type":"string",
 	"required":true,
 	"value":"",
+	"need":false,
 	"highlight":false
 }
